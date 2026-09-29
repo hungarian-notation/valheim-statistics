@@ -67,14 +67,14 @@ I worked up a little simulation. Here's the results!
 
 This plot shows how likely you are to get your first trophy on or before a certain kill, with the different traces corresponding to different numbers of kill per restart:
 
-[Plot: First Drop Probability](https://i.imgur.com/itVW1pR.png)
+[Plot: First Drop Probability](https://github.com/hungarian-notation/valheim-statistics/blob/main/plots/pseudo_drop.first.png?raw=true)
 
 
 The fewer kills you get between restarts, the more total kills you will need on average to get that trophy. If you power through and kill 16 bears in a single session without getting a trophy you are treated with better than expected odds for the next four kills, but otherwise your chances are always worse than the pre-1.0 formula.
 
 The drop rates over longer periods are arguably even more grim, as it becomes obvious how much of a nerf this change is.
 
-[Plot: Average Drop Rate](https://i.imgur.com/IfM3O8c.png)
+[Plot: Average Drop Rate](https://github.com/hungarian-notation/valheim-statistics/blob/main/plots/pseudo_drop.average.png?raw=true)
 
 Note that while the new algorithm does have an increased likelyhood of a drop after 17 consecutive kills, that's assuming you actually went 17 kills without a drop. The average **total** drops after 17 kills is still higher with the old algorithm.
 
@@ -90,8 +90,8 @@ In other words, the current algorithm is equivalent to assuming the first interv
 
 Here are the plots you'd get if the devs implemented this fix:
 
-[Plot: First Drop Probability (Fixed)](https://i.imgur.com/G0K0Gs4.png)
-[Plot: Average Drop Rate (Fixed)](https://imgur.com/9BHimNs)
+[Plot: First Drop Probability (Fixed)](https://github.com/hungarian-notation/valheim-statistics/blob/main/plots/pseudo_drop_random_arrival.first.png?raw=true)
+[Plot: Average Drop Rate (Fixed)](https://github.com/hungarian-notation/valheim-statistics/blob/main/plots/pseudo_drop_random_arrival.average.png?raw=true)
 
 Bingo! We've reduced the chance of (and put an upper bound on) dry spells, but now the worst case scenario (restarting after every kill) is identical in behavior to the pre-1.0 odds, and we've done all this without changing the overall drop rate in the long term.
 
