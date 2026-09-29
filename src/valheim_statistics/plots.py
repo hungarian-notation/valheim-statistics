@@ -153,6 +153,8 @@ def first_drop_plot(
     scale=1.5,
     seed: int | None = None,
 ):
+    print(f"plotting (first) ({algo.name()})...")
+
     if seed is not None:
         random.seed(seed)
     if name is None:
@@ -171,6 +173,7 @@ def first_drop_plot(
             x=list(domain),
             y=[nominal_series.get(x, None) for x in domain],
             name="Nominal (Pre 1.0)",
+            zorder=100,
         )
     )
 
@@ -209,7 +212,7 @@ def first_drop_plot(
     )
 
     figure.update_layout(showlegend=True)
-    figure.show()
+    # figure.show()
     figure.write_image(_plot_filename(name, "first"), scale=scale)
 
 
@@ -220,6 +223,8 @@ def average_drop_plot(
     scale=1.5,
     seed: int | None = None,
 ):
+    print(f"plotting (average) ({algo.name()})...")
+
     if seed is not None:
         random.seed(seed)
     if name is None:
@@ -243,6 +248,7 @@ def average_drop_plot(
             x=domain,
             y=[chance * x for x in domain],
             name="Nominal (Pre 1.0)",
+            zorder=100,
         )
     )
 
@@ -267,7 +273,7 @@ def average_drop_plot(
         )
 
     figure.update_layout(showlegend=True)
-    figure.show()
+    # figure.show()
     figure.write_image(_plot_filename(name, "average"), scale=scale)
 
 
@@ -280,3 +286,5 @@ if __name__ == "__main__":
     average_drop_plot(algo=PseudoDropCorrectedInterval(), seed=42)
     first_drop_plot(algo=PseudoDropRandomArrival(), seed=42)
     average_drop_plot(algo=PseudoDropRandomArrival(), seed=42)
+    first_drop_plot(algo=HybridPitySystem(), seed=42)
+    average_drop_plot(algo=HybridPitySystem(), seed=42)

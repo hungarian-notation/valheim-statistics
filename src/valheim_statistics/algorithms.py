@@ -105,6 +105,46 @@ class PseudoDropCorrectedInterval(DropChanceAlgorithm):
             self._next = None
 
 
+class HybridPitySystem(DropChanceAlgorithm):
+    def simulator_factory(self, chance: float) -> DropSimulatorFactory:
+        return partial(self._Sim, chance=chance)
+
+    class _Sim:
+        def __init__(self, chance: float):
+            self._chance: float = chance
+            self._next: int | None = None
+
+            self._samples: int = 0
+            self._drops: int = 0
+
+        def sample(self):
+            drop = False
+
+            if random.random() < self._chance:
+                drop = True
+            else:
+                if self._next is None:
+                    self._next = randint_exclusive(
+                        int(1 / self._chance * 1), int(1 / self._chance * 2)
+                    )
+                self._next -= 1
+                if self._next <= 0:
+                    drop = True
+
+            if drop:
+                self._next = randint_exclusive(
+                    int(1 / self._chance * 1), int(1 / self._chance * 2)
+                )
+
+            self._samples += 1
+            self._drops += 1 if drop else 0
+
+            return drop
+
+        def reset(self):
+            self._next = None
+
+
 class PseudoDropRandomArrival(DropChanceAlgorithm):
     def simulator_factory(self, chance: float) -> DropSimulatorFactory:
         return partial(self._Sim, chance=chance)
