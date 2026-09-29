@@ -1,0 +1,13 @@
+
+# Python
+.venv/
+__pycache__/
+
+# PyTest
+.pytest_cache/
+
+# Poetry
+poetry.toml
+
+# IDE
+.vscode/

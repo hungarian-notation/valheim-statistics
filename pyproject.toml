@@ -1,0 +1,15 @@
+[project]
+name="valheim-statistics"
+version="0.0.1"
+
+requires-python = ">=3.14"
+[tool.poetry.dependencies]
+plotly = "^7.1.0"
+pandas = "^3.0.6"
+kaleido = "^1.4.0"
+
+[dependency-groups]
+dev = [
+    "pytest (>=9.1.1,<10.0.0)",
+    "pytest-rerunfailures (>=16.7,<17.0)"
+]
