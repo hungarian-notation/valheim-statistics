@@ -142,8 +142,12 @@ def _series_label(kps: int | None):
 _PLOT_DIR = Path("./plots")
 
 
-def _plot_filename(name, plot_type):
-    return str(_PLOT_DIR / f"{(name).lower().replace(' ', '_')}.{plot_type}.png")
+def _plot_filename(name, plot_type, plot_chance: float):
+    chance_term = "" if plot_chance == 0.1 else f".{int(plot_chance * 100):d}"
+
+    return str(
+        _PLOT_DIR / f"{(name).lower().replace(' ', '_')}{chance_term}.{plot_type}.png"
+    )
 
 
 def first_drop_plot(
@@ -213,7 +217,7 @@ def first_drop_plot(
 
     figure.update_layout(showlegend=True)
     # figure.show()
-    figure.write_image(_plot_filename(name, "first"), scale=scale)
+    figure.write_image(_plot_filename(name, "first", chance), scale=scale)
 
 
 def average_drop_plot(
@@ -230,7 +234,7 @@ def average_drop_plot(
     if name is None:
         name = algo.name()
 
-    trials = 5000
+    trials = 3000
     domain = [1, 5, 10, 15, 20] + list(range(30, 210, 10))
 
     figure = go.Figure()
@@ -274,17 +278,23 @@ def average_drop_plot(
 
     figure.update_layout(showlegend=True)
     # figure.show()
-    figure.write_image(_plot_filename(name, "average"), scale=scale)
+    figure.write_image(_plot_filename(name, "average", chance), scale=scale)
 
 
 if __name__ == "__main__":
     if not _PLOT_DIR.exists():
         _PLOT_DIR.mkdir(parents=True)
 
-    first_drop_plot(algo=PseudoDrop(), seed=42)
-    average_drop_plot(algo=PseudoDrop(), seed=42)
-    average_drop_plot(algo=PseudoDropCorrectedInterval(), seed=42)
-    first_drop_plot(algo=PseudoDropRandomArrival(), seed=42)
-    average_drop_plot(algo=PseudoDropRandomArrival(), seed=42)
-    first_drop_plot(algo=HybridPitySystem(), seed=42)
-    average_drop_plot(algo=HybridPitySystem(), seed=42)
+    # first_drop_plot(algo=PseudoDrop(), seed=42)
+    # average_drop_plot(algo=PseudoDrop(), seed=42)
+    # average_drop_plot(algo=PseudoDropCorrectedInterval(), seed=42)
+    # first_drop_plot(algo=PseudoDropRandomArrival(), seed=42)
+    # average_drop_plot(algo=PseudoDropRandomArrival(), seed=42)
+    # first_drop_plot(algo=HybridPitySystem(), seed=42)
+    # average_drop_plot(algo=HybridPitySystem(), seed=42)
+
+    first_drop_plot(algo=BorrowedLuckSystem(), seed=42)
+    average_drop_plot(algo=BorrowedLuckSystem(), seed=42)
+    average_drop_plot(algo=BorrowedLuckSystem(), seed=42, chance=0.3)
+    average_drop_plot(algo=BorrowedLuckSystem(), seed=42, chance=0.2)
+    average_drop_plot(algo=BorrowedLuckSystem(), seed=42, chance=0.05)

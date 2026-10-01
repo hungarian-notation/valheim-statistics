@@ -145,6 +145,69 @@ class HybridPitySystem(DropChanceAlgorithm):
             self._next = None
 
 
+class BorrowedLuckSystem(DropChanceAlgorithm):
+    def simulator_factory(self, chance: float) -> DropSimulatorFactory:
+        return partial(self._Sim, chance=chance)
+
+    class _Sim:
+        def __init__(self, chance: float):
+            self._chance: float = chance
+            self._interval: int = 0
+            self._next: int | None = None
+            self._samples: int = 0
+            self._drops: int = 0
+            self._penalty = 0
+
+            self._drought = 0
+
+        @property
+        def excess_drops(self):
+            return max(0, self._drops - (self._chance * self._samples))
+
+        @property
+        def max_interval(self):
+            return int(1 / self._chance * 2) - 1
+
+        def next_interval(self):
+            interval = randint_exclusive(
+                int(1 / self._chance * 1), int(1 / self._chance * 2)
+            )
+            return interval
+
+        def sample(self):
+            drop = False
+
+            if self._penalty > 0:
+                self._penalty -= 1
+            elif random.random() < self._chance:
+                drop = True
+            else:
+                if self._next is None:
+                    self._interval = self.next_interval()
+                    self._next = self._interval
+
+                self._next -= 1
+
+                if self._next <= 0:
+                    drop = True
+                    self._penalty += 2 * m.ceil(self.max_interval - self._interval)
+
+            if drop:
+                self._interval = self.next_interval()
+                self._next = self._interval
+                self._drought = 0
+            else:
+                self._drought += 1
+
+            self._samples += 1
+            self._drops += 1 if drop else 0
+
+            return drop
+
+        def reset(self):
+            self._next = None
+
+
 class PseudoDropRandomArrival(DropChanceAlgorithm):
     def simulator_factory(self, chance: float) -> DropSimulatorFactory:
         return partial(self._Sim, chance=chance)
