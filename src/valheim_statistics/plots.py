@@ -178,7 +178,7 @@ def first_drop_plot(
     )
 
     figure.update_layout(
-        title="Probability of kills before first drop (k_r)"
+        title="Probability of first item drop occuring on or before a certain kill."
         "<br>"
         f"<i>chance: {chance}, algorithm: {algo.name()}</i>",
     )
@@ -213,7 +213,7 @@ def first_drop_plot(
 
     figure.update_layout(showlegend=True)
     # figure.show()
-    figure.write_image(_plot_filename(name, "first"), scale=scale)
+    figure.write_image(_plot_filename(algo.lower_name(), "first"), scale=scale)
 
 
 def average_drop_plot(
@@ -274,17 +274,17 @@ def average_drop_plot(
 
     figure.update_layout(showlegend=True)
     # figure.show()
-    figure.write_image(_plot_filename(name, "average"), scale=scale)
+    figure.write_image(_plot_filename(algo.lower_name(), "average"), scale=scale)
 
 
 if __name__ == "__main__":
     if not _PLOT_DIR.exists():
         _PLOT_DIR.mkdir(parents=True)
 
-    first_drop_plot(algo=PseudoDrop(), seed=42)
-    average_drop_plot(algo=PseudoDrop(), seed=42)
-    average_drop_plot(algo=PseudoDropCorrectedInterval(), seed=42)
-    first_drop_plot(algo=PseudoDropRandomArrival(), seed=42)
-    average_drop_plot(algo=PseudoDropRandomArrival(), seed=42)
+    # first_drop_plot(algo=PseudoDrop(), seed=42)
+    # average_drop_plot(algo=PseudoDrop(), seed=42)
+    # # average_drop_plot(algo=PseudoDropCorrectedInterval(), seed=42)
+    # first_drop_plot(algo=PseudoDropRandomArrival(), seed=42)
+    # average_drop_plot(algo=PseudoDropRandomArrival(), seed=42)
     first_drop_plot(algo=HybridPitySystem(), seed=42)
     average_drop_plot(algo=HybridPitySystem(), seed=42)

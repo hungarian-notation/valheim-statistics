@@ -1,5 +1,6 @@
 import math as m
 import random
+from abc import ABC
 from collections.abc import Callable
 from functools import cache, partial
 from typing import Protocol
@@ -9,7 +10,7 @@ from valheim_statistics.caseutil import pascal_to_snake, pascal_to_words
 type DropSimulatorFactory = Callable[[], DropChanceSimulator]
 
 
-class DropChanceAlgorithm(Protocol):
+class DropChanceAlgorithm(ABC):
     @classmethod
     def name(cls) -> str:
         return pascal_to_words(cls.__name__)
@@ -59,6 +60,10 @@ def randint_exclusive(inclusive_lower: int, exclusive_upper: int) -> int:
 
 
 class PseudoDrop(DropChanceAlgorithm):
+    @classmethod
+    def name(cls) -> str:
+        return "Vanilla Pseudo Drop"
+
     def simulator_factory(self, chance: float) -> DropSimulatorFactory:
         return partial(self._Sim, chance=chance)
 
@@ -146,6 +151,10 @@ class HybridPitySystem(DropChanceAlgorithm):
 
 
 class PseudoDropRandomArrival(DropChanceAlgorithm):
+    @classmethod
+    def name(cls) -> str:
+        return "Fixed Pseudo Drop"
+
     def simulator_factory(self, chance: float) -> DropSimulatorFactory:
         return partial(self._Sim, chance=chance)
 
